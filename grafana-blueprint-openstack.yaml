@@ -28,7 +28,7 @@ inputs:
 
   grafana_ui_port:
     description: >
-      User for connecting to agent VM's
+      Grafana grafana_ui_port
 
 node_templates:
 
