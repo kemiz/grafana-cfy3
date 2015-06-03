@@ -1,0 +1,65 @@
+###########################################################
+# This Blueprint installs the Grafana
+# on an openstack cloud environment.
+###########################################################
+
+tosca_definitions_version: cloudify_dsl_1_0
+
+imports:
+  - http://www.getcloudify.org/spec/cloudify/3.2m8/types.yaml
+  - http://www.getcloudify.org/spec/openstack-plugin/1.2m8/plugin.yaml
+  - http://www.getcloudify.org/spec/diamond-plugin/1.2m8/plugin.yaml
+  - https://raw.githubusercontent.com/kemiz/monitored-server-cfy3/master/types/monitored-server-types.yaml
+  - types/grafana.yaml
+
+inputs:
+
+  image:
+    description: >
+      Image to be used when launching agent VM's
+
+  flavor:
+    description: >
+      Flavor of the agent VM's
+
+  agent_user:
+    description: >
+      User for connecting to agent VM's
+
+  grafana_ui_port:
+    description: >
+      User for connecting to agent VM's
+
+node_templates:
+
+  grafana_host:
+    type: monitoredhosts.openstack.nodes.MonitoredServer
+    relationships:
+      - target: grafana_security_group
+        type: cloudify.openstack.server_connected_to_security_group
+
+  grafana:
+    type: grafana.nodes.Grafana
+    properties:
+      port: { get_input: grafana_ui_port }
+    relationships:
+      - type: cloudify.relationships.contained_in
+        target: grafana_host
+
+  ###########################################################
+  # A security group to enable access to the grafana host
+  # using the port of the grafana node.
+  #
+  # We need this so that applications can
+  # comminicate with grafana, since they are running on
+  # different hosts.
+  ###########################################################
+
+  grafana_security_group:
+    type: cloudify.openstack.nodes.SecurityGroup
+    properties:
+      security_group:
+        name: grafana_security_group
+      rules:
+        - remote_ip_prefix: 0.0.0.0/0
+          port: { get_property: [ grafana, port ] }

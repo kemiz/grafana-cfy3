@@ -16,26 +16,21 @@ node_types:
         type: integer
     interfaces:
       cloudify.interfaces.lifecycle:
-        configure:
-          implementation: script.script_runner.tasks.run
-          inputs:
-            script_path:
-              default: 
         create: 
           implementation: script.script_runner.tasks.run
           inputs:
             script_path:
-              default: 
+              default: https://raw.githubusercontent.com/kemiz/grafana-cfy3/3.2m8/scripts/install-grafana.sh
         start:
           implementation: script.script_runner.tasks.run
           inputs:
             script_path:
-              default: 
+              default: https://raw.githubusercontent.com/kemiz/grafana-cfy3/3.2m8/scripts/start-grafana.sh
         stop:
           implementation: script.script_runner.tasks.run
           inputs:
             script_path:
-              default: 
+              default: https://raw.githubusercontent.com/kemiz/grafana-cfy3/3.2m8/scripts/stop-grafana.sh
 
 relationships:
 
