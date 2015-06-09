@@ -36,10 +36,10 @@ relationships:
 
   connected_to_grafana:
     derived_from: cloudify.relationships.connected_to
-    target_interfaces:
-      cloudify.interfaces.relationship_lifecycle:
-        postconfigure:
-          implementation: script.script_runner.tasks.run
-          inputs:
-            script_path:
-              default: 
+    # target_interfaces:
+      # cloudify.interfaces.relationship_lifecycle:
+      #   postconfigure:
+      #     implementation: script.script_runner.tasks.run
+      #     inputs:
+      #       script_path:
+      #         default: 
